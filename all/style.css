@@ -379,7 +379,11 @@ font-size: 30px;
 /* ===================================================
    RESPONSIVE
 =================================================== */
-
+@media(max-width:1280px){
+.menu li a{
+    font-size:12px;
+}
+}
 @media(max-width:980px){
 
 .menu{
