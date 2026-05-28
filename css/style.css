@@ -294,7 +294,11 @@
 /* ===================================================
    RESPONSIVE
 =================================================== */
-
+@media(max-width:1280px){
+.big-cards{
+    width: 80%;
+}
+}
 @media(max-width:980px){
 
 .big-cards-container{
