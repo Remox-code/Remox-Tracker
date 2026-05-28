@@ -1,0 +1,302 @@
+// ===== GLOBAL VARIABLES =====
+const modal = document.getElementById("taskModal");
+const openBtn = document.getElementById("openTaskModal");
+const addBtn = document.getElementById("addTaskBtn");
+const emptyAddBtn = document.getElementById("emptyAddBtn");
+const taskInput = document.getElementById("taskInput");
+const taskPriority = document.getElementById("taskPriority");
+const tasksContainer = document.querySelector(".tasks-table");
+const filterBtns = document.querySelectorAll('.filter-btn');
+
+let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+let currentFilter = 'daily'; 
+let selectedDate = null; 
+
+// وزن‌دهی به اولویت‌ها برای مرتب‌سازی
+const priorityWeight = { high: 1, medium: 2, low: 3 };
+
+// ===== INIT & LISTENERS =====
+
+filterBtns.forEach(btn => {
+    btn.onclick = () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        currentFilter = btn.getAttribute('data-filter');
+        selectedDate = null; 
+        renderTasks();
+    };
+});
+
+const openModal = () => modal.classList.add("active");
+const closeModal = () => { modal.classList.remove("active"); taskInput.value = ""; };
+
+openBtn.onclick = openModal;
+if(emptyAddBtn) emptyAddBtn.onclick = openModal;
+modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+
+// ===== HELPERS =====
+function saveTasks() { localStorage.setItem("tasks", JSON.stringify(tasks)); }
+function getTodayISO() { return new Date().toISOString().split("T")[0]; }
+function formatDate(dateStr) {
+    return new Date(dateStr).toLocaleDateString("en-US", { month: "short", day: "numeric" });
+}
+
+// اصلی‌ترین بخش: فیلتر کردن تسک‌ها بر اساس Scope (محدوده)
+function getFilteredTasks() {
+    return tasks.filter(t => t.scope === currentFilter);
+}
+
+// ===== RENDER LOGIC =====
+
+function renderTasks() {
+    tasksContainer.innerHTML = "";
+    tasksContainer.classList.remove("calendar-grid");
+
+    const filtered = getFilteredTasks();
+
+    if (currentFilter === 'daily') {
+        renderDailyView(filtered);
+    } else {
+        renderCalendarView(filtered);
+    }
+    
+    // آپدیت آمار فقط بر اساس تسک‌های فیلتر شده
+    updateStats(filtered);
+    updateCircleProgress(filtered);
+}
+
+// --- حالت روزانه (با قابلیت مرتب‌سازی اولویت) ---
+function renderDailyView(filtered) {
+    tasksContainer.innerHTML = `
+        <div class="tasks-table-header">
+            <span></span><span>Task</span><span>Priority</span><span>Deadline</span><span>Progress</span><span></span>
+        </div>`;
+
+    if (filtered.length === 0) {
+        showEmptyState(`No tasks in Daily view`);
+        return;
+    }
+
+    // مرتب‌سازی: اول High، بعد Medium، بعد Low
+    const sortedTasks = [...filtered].sort((a, b) => priorityWeight[a.priority] - priorityWeight[b.priority]);
+
+    sortedTasks.forEach(task => {
+        const taskEl = createTaskRow(task);
+        tasksContainer.appendChild(taskEl);
+    });
+}
+
+// --- حالت تقویمی (هفتگی و ماهانه - کاملاً مستقل) ---
+function renderCalendarView(filtered) {
+    tasksContainer.classList.add("calendar-grid");
+    
+    let daysToShow = [];
+    const today = new Date();
+
+    if (currentFilter === 'weekly') {
+        for (let i = 0; i < 7; i++) {
+            let d = new Date();
+            d.setDate(today.getDate() - today.getDay() + i);
+            daysToShow.push(d.toISOString().split('T')[0]);
+        }
+    } else {
+        const year = today.getFullYear();
+        const month = today.getMonth();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        for (let i = 1; i <= daysInMonth; i++) {
+            daysToShow.push(`${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`);
+        }
+    }
+
+    daysToShow.forEach(date => {
+        const dayCell = document.createElement('div');
+        dayCell.className = `day-cell ${selectedDate === date ? 'selected' : ''}`;
+        dayCell.innerHTML = `<h4>${formatDate(date)}</h4><ul></ul>`;
+        
+        dayCell.onclick = () => {
+            selectedDate = (selectedDate === date) ? null : date;
+            renderTasks();
+        };
+
+        const dayTasks = filtered.filter(t => t.date === date);
+        const ul = dayCell.querySelector('ul');
+
+        dayTasks.forEach(task => {
+            const li = document.createElement('li');
+// در داخل حلقه dayTasks.forEach در renderCalendarView:
+li.className = task.completed ? "completed-task-li" : "";
+li.innerHTML = `
+    <input type="checkbox" ${task.completed ? 'checked' : ''}>
+    <span title="${task.text}">${task.text}</span>
+    <button class="mini-del" title="Delete">✕</button>
+`;
+
+            
+            li.querySelector('input').onclick = (e) => e.stopPropagation();
+            li.querySelector('input').onchange = () => {
+                task.completed = !task.completed;
+                saveTasks();
+                renderTasks();
+            };
+
+            li.querySelector('.mini-del').onclick = (e) => {
+                e.stopPropagation();
+                tasks = tasks.filter(t => t !== task);
+                saveTasks();
+                renderTasks();
+            };
+            ul.appendChild(li);
+        });
+        tasksContainer.appendChild(dayCell);
+    });
+}
+
+function createTaskRow(task) {
+    const div = document.createElement("div");
+    div.className = `task-row ${task.completed ? 'completed' : ''}`;
+    div.innerHTML = `
+        <input type="checkbox" ${task.completed ? "checked" : ""}>
+        <div><strong>${task.text}</strong></div>
+        <span class="priority ${task.priority}">${task.priority}</span>
+        <span>${formatDate(task.date)}</span>
+        <div class="progress"><div style="width:${task.completed ? "100%" : "0%"}"></div></div>
+        <button class="delete-task">✕</button>
+    `;
+
+    div.querySelector("input").onchange = (e) => {
+        task.completed = e.target.checked;
+        saveTasks();
+        renderTasks();
+    };
+
+    div.querySelector(".delete-task").onclick = () => {
+        tasks = tasks.filter(t => t !== task);
+        saveTasks();
+        renderTasks();
+    };
+    return div;
+}
+
+function showEmptyState(msg) {
+    tasksContainer.innerHTML += `
+        <div class="empty-state">
+            <div class="empty-icon">🗂</div>
+            <h3>${msg}</h3>
+            <button class="empty-add-btn" onclick="modal.classList.add('active')">+ Add Task</button>
+        </div>`;
+}
+
+// ===== ACTIONS =====
+function addTask() {
+    const text = taskInput.value.trim();
+    if (!text) return;
+
+    let targetDate = getTodayISO();
+    if (currentFilter !== 'daily' && selectedDate) {
+        targetDate = selectedDate;
+    }
+
+    tasks.push({
+        text: text,
+        priority: taskPriority.value,
+        date: targetDate,
+        completed: false,
+        scope: currentFilter // این تسک فقط متعلق به این فیلتر است
+    });
+
+    saveTasks();
+    renderTasks();
+    closeModal();
+}
+
+addBtn.onclick = addTask;
+
+// ===== STATS & UI (DYNAMICS) =====
+function updateStats(filtered) {
+    document.getElementById("totalTasks").textContent = filtered.length;
+    document.getElementById("completedTasks").textContent = filtered.filter(t => t.completed).length;
+    document.getElementById("inProgressTasks").textContent = filtered.filter(t => !t.completed).length;
+    
+    const overdue = filtered.filter(t => {
+        const isPast = new Date(t.date) < new Date(getTodayISO());
+        return isPast && !t.completed;
+    }).length;
+    
+    document.getElementById("overdueTasks").textContent = overdue;
+}
+
+function updateCircleProgress(filtered) {
+    const total = filtered.length;
+    const completed = filtered.filter(t => t.completed).length;
+    const percent = total ? Math.round((completed / total) * 100) : 0;
+    
+    const circle = document.getElementById("circleProgress");
+    if(circle) {
+        circle.style.setProperty("--progress", percent + "%");
+        document.getElementById("circlePercent").textContent = percent + "%";
+    }
+}
+
+
+// ۱. افزودن تسک با زدن اینتر
+taskInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+        addTask();
+    }
+});
+
+// ۲. شورت‌کات کلید "n" برای باز کردن مودال و فوکوس خودکار
+document.addEventListener('keydown', (e) => {
+    if (e.key.toLowerCase() === 'n' && !modal.classList.contains('active')) {
+        openModal();
+        setTimeout(() => taskInput.focus(), 100);
+    }
+});
+
+// ===== ACTIONS =====
+function addTask() {
+    const text = taskInput.value.trim();
+    if (!text) return;
+
+    let targetDate = getTodayISO();
+    // اگر در مودال هستیم و فیلتر روی روزانه نیست، تاریخ انتخاب شده (یا امروز) لحاظ شود
+    if (currentFilter !== 'daily' && selectedDate) {
+        targetDate = selectedDate;
+    }
+
+    tasks.push({
+        text: text,
+        priority: taskPriority.value,
+        date: targetDate,
+        completed: false,
+        scope: currentFilter
+    });
+
+    saveTasks();
+    renderTasks();
+    closeModal();
+}
+
+addBtn.onclick = addTask;
+
+// ===== STATS & UI (DYNAMICS) =====
+function updateStats(filtered) {
+    document.getElementById("totalTasks").textContent = filtered.length;
+    document.getElementById("completedTasks").textContent = filtered.filter(t => t.completed).length;
+    document.getElementById("inProgressTasks").textContent = filtered.filter(t => !t.completed).length;
+    
+    // منطق داینامیک Overdue
+    const todayStr = getTodayISO();
+    const overdue = filtered.filter(t => {
+        // تسک‌هایی که تاریخشان قبل از امروز است و هنوز تکمیل نشده‌اند
+        return t.date < todayStr && !t.completed;
+    }).length;
+    
+    document.getElementById("overdueTasks").textContent = overdue;
+}
+
+// ... (بقیه توابع بدون تغییر باقی می‌مانند)
+
+
+// INITIAL RUN
+renderTasks();

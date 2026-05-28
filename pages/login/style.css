@@ -1,0 +1,161 @@
+.auth-container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    margin: 50px auto;
+}
+
+.auth-card {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(74,163,255,0.2);
+    border-radius: 20px;
+    padding: 40px 35px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.4), inset 0 0 40px rgba(74,163,255,0.08);
+    backdrop-filter: blur(10px);
+    text-align: center;
+    transition: 0.3s;
+}
+
+.auth-card:hover {
+    border-color: rgba(74,163,255,0.45);
+    box-shadow: 0 0 35px rgba(74,163,255,0.2);
+}
+
+#auth-title {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+#auth-subtitle {
+    color: #aec7e9;
+    margin-bottom: 30px;
+}
+
+.auth-input {
+    width: 100%;
+    padding: 14px;
+    margin-bottom: 15px;
+    border-radius: 12px;
+    border: 1px solid rgba(74,163,255,0.25);
+    background: rgba(255,255,255,0.03);
+    color: white;
+    font-size: 15px;
+    transition: 0.2s;
+}
+
+.auth-input:focus {
+    border-color: #4aa3ff;
+    box-shadow: 0 0 10px rgba(74,163,255,0.3);
+    outline: none;
+}
+
+.auth-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #4d6eff, #4aa3ff);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.25s;
+}
+
+.auth-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0 18px rgba(74,163,255,0.4);
+}
+
+/* Switch Text */
+.switch-text {
+    margin-top: 20px;
+    color: #ffffff;
+}
+
+.switch-btn {
+    background: none;
+    border: none;
+    color: #53a2f1;
+    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    margin-left: 5px;
+}
+
+.switch-btn:hover {
+    text-shadow: 0 0 8px rgba(40, 148, 255, 0.5);
+}
+
+/* Form animations */
+#signup-form, #login-form {
+    display: none;
+    opacity: 0;
+    transform: translateY(15px);
+    transition: all 0.3s ease;
+}
+
+.form-active {
+    display: block !important;
+    opacity: 1 !important;
+    transform: translateY(0) !important;
+}
+/* ======================================
+   ADVANCED PARALLAX NEON FIELD (12 shapes)
+   ====================================== */
+
+.auth-bg {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 140%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+}
+
+/* Base style */
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.55;
+    animation: float 6s infinite ease-in-out alternate;
+    transition: transform 0.15s linear;
+}
+
+/* Sizes (randomized per layer) */
+.s1, .s4, .s7, .s10 { width: 140px; height: 140px; }
+.s2, .s5, .s8, .s11 { width: 200px; height: 200px; }
+.s3, .s6, .s9, .s12 { width: 260px; height: 260px; }
+
+/* Colors */
+.s1  { background:#4aa3ff; top: 5%; right: 8%; }
+.s2  { background:#6f4dff; top: 25%; right: 15%; }
+.s3  { background:#ff3cac; top: 55%; right: 5%; }
+
+.s4  { background:#42f5aa; top: 35%; right: 30%; }
+.s5  { background:#4aa3ff; top: 75%; right: 18%; }
+.s6  { background:#ff3cac; top: 10%; right: 35%; }
+
+.s7  { background:#6f4dff; top: 60%; right: 28%; }
+.s8  { background:#42f5aa; top: 40%; right: 5%; }
+.s9  { background:#4aa3ff; top: 80%; right: 35%; }
+
+.s10 { background:#ff3cac; top: 15%; right: 50%; }
+.s11 { background:#6f4dff; top: 48%; right: 55%; }
+.s12 { background:#42f5aa; top: 70%; right: 48%; }
+
+/* Stronger floating motion */
+@keyframes float {
+    0%   { transform: translateY(0px) scale(1); }
+    50%  { transform: translateY(-40px) scale(1.08); }
+    100% { transform: translateY(0px) scale(1); }
+}
+@media (max-width:500px) {
+.auth-container {
+    width: 90%;
+}
+
+}

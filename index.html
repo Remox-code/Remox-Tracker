@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>home</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="all/style.css">
+
+</head>
+<body>
+
+<div class="layot">
+
+<!-- ========== humberegr ========== -->
+
+<div class="hamburger" id="hamburger-btn">
+  <span></span>
+  <span></span>
+  <span></span>
+</div>
+
+<!-- ========== Menu ========== -->
+
+<aside class="menu" id="sidebar">
+    
+    <div class="menu-content">
+        <h2>Remox-Tracker</h2>
+        <ul>
+            <li><a href="#" class="active">🏠 Dashboard</a></li>
+            <li><a href="pages/project/project.html">💻 Projects</a></li>
+            <li><a href="pages/tasks/tasks.html">✅ Tasks</a></li>
+            <li><a href="pages/team/team.html">🙎 Our Team</a></li>
+            <li><a href="pages/habits/habits.html">📅 Habits</a></li>
+            <li><a href="pages/settings/settings.html">⚙️ Settings</a></li>
+            <li><a href="pages/anylist/anylist.html" class="icon-Habits">💼 AnyList</a></li>
+            <li><a href="pages/targets/targets.html" class="icon-Habits">🎯 Targets</a></li>
+            <li><a href="pages/how/how.html" class="icon-Habits">❓ How to use</a></li>
+        </ul>
+
+    </div>
+
+    <div class="day-streak-container">
+        <div class="streak-card">
+            <div class="streak-main">
+                <div class="streak-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.657 18.657C16.223 20.0906 14.2144 20.8974 12.1221 20.8974C10.0299 20.8974 8.02126 20.0906 6.587 18.657C5.15274 17.2233 4.34586 15.2148 4.34586 13.1225C4.34586 11.0302 5.15274 9.02166 6.587 7.588L12.122 2L17.657 7.588C19.0913 9.02166 19.8981 11.0302 19.8981 13.1225C19.8981 15.2148 19.0913 17.2233 17.657 18.657Z" stroke="#8b5cf6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="streak-info">
+                    <div class="streak-number">
+                        <span id="streak-count">15</span>
+                        <small>Days</small>
+                    </div>
+                    <p>Current Streak</p>
+                </div>
+            </div>
+            <!-- موج پایین کارت -->
+            <div class="streak-wave"></div>
+        </div>
+        </div>
+</aside>
+
+
+
+<div class="page">
+<!-- ========== HEADER ========== -->
+
+<header class="header">
+
+    <input type="search" placeholder="🔎 search">
+        <a class="login" href="pages/login/login.html">Login</a>
+
+        <div class="header-img">
+            <img src="assets/images/logo.jpg">
+            <img class="admin" src="assets/images/profile (1).jpg">
+        </div>
+
+</header>
+
+<!-- ========== HABIT TRACKER SECTION (جایگزین Hero) ========== -->
+<section class="habit-dashboard scroll-anim">
+    <div class="welcome-area">
+        <h1>Welcome back, Remox! 👋</h1>
+        <p> <strong>Befor you start go to page How To Use</strong></p>
+    </div>
+
+    <div class="habit-quick-grid">
+        <!-- Habit Item 1 -->
+        <div class="habit-card">
+            <div class="habit-info">
+                <span class="habit-icon">📖</span>
+                <div>
+                    <h4>Read 10 Pages</h4>
+                    <small>Daily Streak: 5 days</small>
+                </div>
+            </div>
+            <input type="checkbox" class="habit-checkbox">
+        </div>
+        <!-- Habit Item 2 -->
+        <div class="habit-card">
+            <div class="habit-info">
+                <span class="habit-icon">💻</span>
+                <div>
+                    <h4>Coding Practice</h4>
+                    <small>Daily Streak: 12 days</small>
+                </div>
+            </div>
+            <input type="checkbox" class="habit-checkbox">
+        </div>
+        <!-- Habit Item 3 -->
+        <div class="habit-card">
+            <div class="habit-info">
+                <span class="habit-icon">🏃‍♂️</span>
+                <div>
+                    <h4>Morning Run</h4>
+                    <small>Daily Streak: 0 days</small>
+                </div>
+            </div>
+            <input type="checkbox" class="habit-checkbox">
+        </div>
+    </div>
+</section>
+
+<!-- ========== STATS CARDS (بروزرسانی شده) ========== -->
+<div class="cards-container">
+    <div class="result-cards">
+        <h1 class="stat-number" data-target="12">0</h1>
+        <h6>Habits Done</h6>
+    </div>
+    <div class="result-cards">
+        <h1 class="stat-number" data-target="85" data-suffix="%">0</h1>
+        <h6>Success Rate</h6>
+    </div>
+    <div class="result-cards">
+        <h1 class="stat-number" data-target="7">0</h1>
+        <h6>Current Streak</h6>
+    </div>
+    <div class="result-cards">
+        <h1 class="stat-number" data-target="1250">0</h1>
+        <h6>Experience Points</h6>
+    </div>
+</div>
+
+
+<!-- ==========big- cards-container ========== -->
+
+<div class="big-cards-container">
+
+<div class="big-cards">
+    <h3>Monthly Growth</h3>
+    <div id="chart-placeholder">
+<img src="assets/images/chart.jpg">
+    </div>
+</div>
+
+<div class="big-cards">
+                <h3>Recent Activity</h3>
+
+        <div class="inside-cards-container">
+
+            <div class="inside-result-cards">
+                <h3 class="stat-number" data-target="154">2h ago</h3>
+                <h4> Design System updated</h4>
+            </div>
+
+            <div class="inside-result-cards">
+                <h3 class="stat-number" data-target="154">2h ago</h3>
+                <h4> Last check list</h4>
+            </div>
+
+            <div class="inside-result-cards">
+                <h3 class="stat-number" data-target="2450">3h ago</34>
+                <h4> New user registered</h4>
+            </div>
+
+            <div class="inside-result-cards">
+                <h3 class="stat-number" data-target="12430" data-prefix="$">Yesterday</h3>
+                <h4>Server migration completed</h4>
+            </div>
+            
+                </div>
+</div>
+</div>
+
+<!-- ==========footer============ -->
+
+<footer class="footer">
+  <div class="footer-container">
+
+    <div class="footer-brand">
+      <h3>Remox Tracker</h3>
+      <p>Modern productivity dashboard to manage projects, teams and analytics in one place.</p>
+    </div>
+
+    <div class="footer-links">
+      <h4>Product</h4>
+      <ul>
+            <li><a href="pages/project/project.html" class="icon-projects"> Projects</a></li>
+            <li><a href="pages/tasks/tasks.html" class="icon-tasks"> Tasks</a></li>
+            <li><a href="pages/team/team.html" class="icon-team"> Our Team</a></li>
+            <li><a href="pages/settings/settings.html" class="icon-settings"> Settings</a></li>
+            <li><a href="pages/habits/habits.html" class="icon-Habits"> Habits</a></li>
+            <li><a href="pages/anylist/anylist.html" class="icon-Habits"> AnyList</a></li>
+            <li><a href="pages/targets/targets.html" class="icon-Habits"> Targets</a></li>
+            <li><a href="pages/how/how.html" class="icon-Habits"> How to use</a></li>
+
+      </ul>
+    </div>
+
+    <div class="footer-links">
+      <h4>Company</h4>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+        <li><a href="#">Careers</a></li>
+        <li><a href="#">Blog</a></li>
+      </ul>
+    </div>
+
+    <div class="footer-social">
+      <h4>Follow</h4>
+      <div class="social-icons">
+        <a href="#">🌐</a>
+        <a href="#">🐦</a>
+        <a href="#">💼</a>
+        <a href="#">📸</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer-bottom">
+    <p>© 2026 Remox Tracker. All rights reserved.</p>
+  </div>
+</footer>
+
+</div>
+</div>
+
+<script src="js/main.js"></script>
+<script src="all/main.js"></script>
+
+</body>
+</html>
