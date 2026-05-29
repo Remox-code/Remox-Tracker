@@ -417,6 +417,8 @@ font-size: 30px;
     height:100vh;
 
     transition:.35s;
+overflow-y: auto;
+overflow-x: hidden;
 
     z-index:1500;
 }
